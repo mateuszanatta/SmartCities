@@ -57,10 +57,10 @@ $response->send();
 
 $kernel->terminate($request, $response);
 
-use SmartCity\Inventory;
+// use SmartCity;
 
-$inventory = Inventory::where("state", "MA")->count();
-
-echo "<pre>";
-print_r($inventory);
-echo "</pre>";
+// $inventory = Inventory::where("state", "MA")->count();
+// $cities = new Cities();
+// echo "<pre>";
+// print_r($inventory);
+// echo "</pre>";
