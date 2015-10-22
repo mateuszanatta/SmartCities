@@ -16,9 +16,11 @@ Route::get('/', function () {
 });
 
 Route::get('cities', 'CitiesController@index');
+Route::get('citiesCategories', 'CitiesController@category');
 Route::get('social', 'SocialController@index');
 Route::get('cidades', 'SocialController@cidades');
 Route::get('facebook', 'FbController@index');
+Route::get('rank', 'RankController@index');
 //Criar link para efetuar login
 Route::get('facebook/login', ['as' => 'facebook.login', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb)
 {
@@ -82,6 +84,9 @@ Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\La
   //Convert the response to a Facebook\GraphNodes/GraphUser collection
   $facebook_user = array_dot($response->getGraphUser());
   Session::put('fb_user_info', $facebook_user);
+  Session::put('isFBLogged', true);
+  Session::put('username', $facebook_user['name']);
+  Session::put('picture', $facebook_user['picture']['url']);
   // echo '<pre>';
   // print_r($facebook_user);
   // echo '</pre>';

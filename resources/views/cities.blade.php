@@ -83,6 +83,7 @@
     <script type="text/javascript">
       // Load the Visualization API and the piechart package.
       google.load('visualization', '1.0', {'packages':['corechart', 'line']});
+      google.load("visualization", "1.1", {packages:["table"]});
 
       $(document).ready(function(){
 
@@ -138,7 +139,7 @@
 
           //Parse the json data from server to JSON format required by Google Charts
           //var cols will keep columns information, first column will be Year
-          var cols = '{ "c" :[{"label":"Anos", "type":"string"},';
+          var cols = '{"label":"Anos", "type":"string"},';
           //var rows will keep rows
           var rows = '';
           //Iterate throughout onject "info[0]"
@@ -149,8 +150,9 @@
             //Iterate throughout object "elem"
             //Here I should write the "key", what has the years, as a first column and next columns
             //must contain the variable "elem", which has the values.
-           $.each(elem, function(key, elem){
-                rows = rows + '{"v": "' + elem + '"},';
+            $.each(elem, function(key, elem){
+              rows = rows + '{"v": "' + key + '"},';
+              rows = rows + '{"v": "' + elem + '"},';
             });
             //remove last comma
             rows = rows.substr(0, (rows.length - 1));
@@ -170,8 +172,8 @@
           console.log('Columns: ' + cols);
 
           var data = new google.visualization.DataTable(cols);
-          var visualization = new google.visualization.LineChart(document.getElementById('chart'));
-          visualization.draw(dataTableData, {width: 400, height: 240});
+          var visualization = new google.visualization.Table(document.getElementById('chart'));
+          visualization.draw(data, {width: 400, height: 240});
 
         }
       });
