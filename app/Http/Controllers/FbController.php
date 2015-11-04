@@ -1,15 +1,14 @@
 <?php
 namespace SmartCity\Http\Controllers;
 use SmartCity\Facebook;
-// use SammyK\LaravelFacebookSdk;
-// use Facebook\Exceptions;
-//use base_path() . '\vendor\facebook\php-sdk-v4\src\Facebook\autoload.php';
 use DB;
 use Session;
-
+/**
+* This class will access the session that helds the facebook information after
+* user log in and store it in the DB
+*/
 class FbController extends Controller{
-//   // if(isset($_POST)){
-//     // $_POST['test'] = 'Received';
+
     public function index(){
       $facebook = new Facebook;
       $facebook->AccessToken = Session::get('fb_user_access_token');

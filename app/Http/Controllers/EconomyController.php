@@ -58,7 +58,7 @@ class EconomyController extends Controller
         return $zTransform->zTransformation($gvaAvg);
     }
     /**
-    *  Calculte the average and z-transform of the amoutn of companies of each city
+    *  Calculte the average and z-transform of the amount of companies of each city
     *  @return Return the z-transform for numbe of companies of each city
     */
     public function cityCompanies(){

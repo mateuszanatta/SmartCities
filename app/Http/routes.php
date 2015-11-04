@@ -21,6 +21,8 @@ Route::get('social', 'SocialController@index');
 Route::get('cidades', 'SocialController@cidades');
 Route::get('facebook', 'FbController@index');
 Route::get('rank', 'RankController@index');
+Route::get('showRank', 'RankController@showRank');
+Route::get('profile', 'CityProfileController@index');
 //Criar link para efetuar login
 Route::get('facebook/login', ['as' => 'facebook.login', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb)
 {

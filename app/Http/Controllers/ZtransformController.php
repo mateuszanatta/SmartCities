@@ -2,34 +2,40 @@
 
 namespace SmartCity\Http\Controllers;
 /**
-  This class has methods to calculate average, standard deviation and z-transformation
+*  This class has methods to calculate average, standard deviation and z-transformation
 */
 class ZtransformController extends Controller
 {
   /**
-    Calculate the average
-    @param array $munInfo
-    @param int $numOfElements
-    @return Return a double with the Standard Deviation
+  *  Calculate the average for the components
+  *  @param array $munInfo
+  *  @param int $numOfElements
+  *  @return Return a double with the Standard Deviation
   */
   public function calculateAverage($munInfo, $numOfElements){
     $sumValues = 0;
     foreach ($munInfo as $key => $value) {
-        if($value == "-"){
-          $value = 0;
-        }
-        //remove the comma and add dot to separate decimal
-        $value = str_replace(",", ".", $value);
-
-        $sumValues += $value;
+        $keyCompare = strtolower($key);
+        if($keyCompare != "1991_(cr$)_(5)" && $keyCompare != "1991_(cr$)" &&
+          $keyCompare != "1991_(cr\$_mil)" && $keyCompare != "1992_(cr\$_mil)" &&
+          $keyCompare != "1992_(cr$)" && $keyCompare != "1993_(cr$)" &&
+          $keyCompare != "1993_(cr\$_mil)"){
+                if($value == "-"){
+                  $value = 0;
+                }
+                //remove the comma and add dot to separate decimal
+                $value = str_replace(",", ".", $value);
+                // echo "</br>".$value;
+                $sumValues += $value;
+            }
       }
       return $sumValues/$numOfElements;
   }
   /**
-    Make the Standar Deviation of averages of the cities
-    @param array $munAverages
-    @param double $avg
-    @return Return a double with the Standard Deviation
+  *  Make the Standar Deviation of averages of the cities
+  *  @param array $munAverages
+  *  @param double $avg
+  *  @return Return a double with the Standard Deviation
   */
   private function standarDeviation($munAverages, $avg){
       //Calculate the Variance of the cities' averages
@@ -45,9 +51,9 @@ class ZtransformController extends Controller
   }
 
   /**
-    Make the z-transform of averages of the cities
-    @param array $munAverages
-    @return Return a array with the z value of each city
+  *  Make the z-transform of averages of the cities
+  *  @param array $munAverages
+  *  @return Return a array with the z value of each city
   */
   public function zTransformation($munAverages){
       //make average of given cities' averages

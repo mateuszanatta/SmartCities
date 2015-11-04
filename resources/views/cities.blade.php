@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css">
   </head>
   <body>
-    <class="container-fluid">
+    <divv class="container-fluid">
       <div class="row">
           <div class="col-sm-4 col-md-3 sidebar">
             <ul class="nav nav-sidebar tree">
