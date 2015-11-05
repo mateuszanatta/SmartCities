@@ -22,18 +22,27 @@ Route::get('cidades', 'SocialController@cidades');
 Route::get('facebook', 'FbController@index');
 Route::get('rank', 'RankController@index');
 Route::get('showRank', 'RankController@showRank');
-Route::get('profile', 'CityProfileController@index');
+
+//These routes will be used to request the charts for the profile page
+Route::get('profiles/{cityName}', 'CityProfileController@index');
+Route::get('profiles/profile/{cityName}', 'CityProfileController@profile');
+Route::get('profiles/education/{cityName}', 'CityProfileController@educationDomain');
+Route::get('profiles/governmentExpenditures/{cityName}', 'CityProfileController@governmentExpendituresDomain');
+Route::get('profiles/health/{cityName}', 'CityProfileController@healthDomain');
+Route::get('profiles/economy/{cityName}', 'CityProfileController@economyDomain');
+Route::get('profiles/employment/{cityName}', 'CityProfileController@employmentDomain');
+Route::get('profiles/environment/{cityName}', 'CityProfileController@environmentDomain');
+//END profile routes
+
 //Criar link para efetuar login
-Route::get('facebook/login', ['as' => 'facebook.login', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb)
-{
+Route::get('facebook/login', ['as' => 'facebook.login', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb){
   //Envia um array com permissoes a serem solicitadas
   $login_url = $fb->getLoginUrl(['email']);
   return $login_url;
 }]);
 
 //Depois da tentativa de login no Facebook sera redirecionado paara endpoint
-Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb)
-{
+Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb){
   //obtain access token
   try{
     $token = $fb->getAccessTokenFromRedirect();

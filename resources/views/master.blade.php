@@ -11,6 +11,7 @@
     <!-- <link rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css"> -->
     <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/css/dashboard.css') }}">
+    @yield("cssSection")
   </head>
   <body>
     @section("nav-bar")
@@ -52,8 +53,9 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script> -->
+    <script src="{{ URL::asset('assets/js/function.js') }}"></script>
     <script type="text/javascript">
-        google.load('visualization', '1.1', {'packages':['corechart', 'line']});
+        //google.load('visualization', '1.1', {'packages':['corechart', 'line']});
         //google.load("visualization", "1.1", {packages:["table"]});
     </script>
     @yield("jsScripts")
