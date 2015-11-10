@@ -64,14 +64,15 @@
 <script type="text/javascript">
 
   google.load("visualization", "1.1", {packages:['corechart']});
+
   google.setOnLoadCallback(function(){
-    drawChart('profile', 'Alpestre', ['#3f51b5'], 'chartProfile', 'Campos chave');
-    drawChart('education', 'Alpestre', ['#f44336'], 'chartEducation', 'Educação');
-    drawChart('governmentExpenditures', 'Alpestre', ['#4caf50'], 'chartGovernment', 'Finanças Públicas');
-    drawChart('health', 'Alpestre', ['#ffeb3b'], 'chartHealth', 'Saúde');
-    drawChart('economy', 'Alpestre', ['#ff5722'], 'chartEconomy', 'Economia');
-    drawChart('employment', 'Alpestre', ['#673ab7'], 'chartEmployment', 'Emprego');
-    drawChart('environment', 'Alpestre', ['#8bc34a'], 'chartEnvironment', 'Meio Ambiente');
+    drawProfileChart('profile', '{{$cityName}}', ['#3f51b5'], 'chartProfile', 'Campos chave');
+    drawProfileChart('education', '{{$cityName}}', ['#f44336'], 'chartEducation', 'Educação');
+    drawProfileChart('governmentExpenditures', '{{$cityName}}', ['#4caf50'], 'chartGovernment', 'Finanças Públicas');
+    drawProfileChart('health', '{{$cityName}}', ['#ffeb3b'], 'chartHealth', 'Saúde');
+    drawProfileChart('economy', '{{$cityName}}', ['#ff5722'], 'chartEconomy', 'Economia');
+    drawProfileChart('employment', '{{$cityName}}', ['#673ab7'], 'chartEmployment', 'Emprego');
+    drawProfileChart('environment', '{{$cityName}}', ['#8bc34a'], 'chartEnvironment', 'Meio Ambiente');
   });
 
 </script>

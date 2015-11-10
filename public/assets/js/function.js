@@ -9,8 +9,8 @@ var BAR_CHART_HEIGHT = '300'; //Constant variables that define the height of the
 * @param string target it will receive the html element id where the chart will be drawn
 * @param string title it will receive the chart title
 */
-function drawChart(subject, city, color, target, title){
-  //console.log(color);
+function drawProfileChart(subject, city, color, target, title){
+
   //Make ajax call to the index method in the CityProfileController
   $.ajax({
     url: ''+subject + '/' + city,
@@ -42,8 +42,8 @@ function drawChart(subject, city, color, target, title){
                       tooltip : { isHtml : true },
                       hAxis:{
                         viewWindow:{
-                          max: 2,
-                          min: -2
+                          max: 7.5,
+                          min: -7.5
                         }
                       },
                       colors: color,

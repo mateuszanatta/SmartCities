@@ -12,16 +12,23 @@ class RankController extends Controller{
   }
 
   public function showRank(){
-    $educationRank       = RankController::ranking(RankController::educationKeyField());
-    $governmentExpenRank = RankController::ranking(RankController::governmentExpendituresKeyField());
-    $healthRank          = RankController::ranking(RankController::healthKeyField());
-    $economyRank         = RankController::ranking(RankController::economyKeyField());
-    $employmentRank      = RankController::ranking(RankController::employmentKeyField());
-    $environmentRank     = RankController::ranking(RankController::environmentKeyField());
+    $educationRank       = RankController::sortZvalues(RankController::educationKeyField());
+    $governmentExpenRank = RankController::sortZvalues(RankController::governmentExpendituresKeyField());
+    $healthRank          = RankController::sortZvalues(RankController::healthKeyField());
+    $economyRank         = RankController::sortZvalues(RankController::economyKeyField());
+    $employmentRank      = RankController::sortZvalues(RankController::employmentKeyField());
+    $environmentRank     = RankController::sortZvalues(RankController::environmentKeyField());
+
+    //Store the overal rating of each city
+    $overallRating       = RankController::overallRating(array('education' => $educationRank,
+                                                  'governmentExpen' => $governmentExpenRank,
+                                                  'health' => $healthRank, 'economy' => $economyRank,
+                                                  'employment' => $employmentRank, 'environment' => $environmentRank));
 
     return array('education' => $educationRank, 'governmentExpen' => $governmentExpenRank,
             'health' => $healthRank, 'economy' => $economyRank,
-            'employment' => $employmentRank, 'environment' => $environmentRank);
+            'employment' => $employmentRank, 'environment' => $environmentRank,
+            'overall' => $overallRating);
   }
   /**
   * This function is intended to be used with array_map and will multiply the z-value by -1 to invert the rank order
@@ -194,7 +201,7 @@ class RankController extends Controller{
 
   /**
   * It will calculate the average of the z-values for Economy
-  * @return return the average of z-values by key field of each city
+  * @return return the average of z-values by key field sortZvaluesof each city
   */
   public function employmentKeyField(){
       $employmnet = new EmploymentController();
@@ -290,26 +297,25 @@ class RankController extends Controller{
       return ceil($value * 1000);
     }
   }
+
+
   /**
-  * Sort and create the ranking
-  * @param array $cityValues receive a array with the z-values
+  * Create the dense ranking from sorted scores
+  *@param array $sortedScores It should receive an array with already sorted values
   */
-  private function ranking($cityValues){
+  private function makeDenseRanking($sortedScores){
     //This will hold the ranking values e.g. 1,2,3 ...
     $rankingScores = array();
-    //truncate the values in the array
-    $truncateValues = array_map(array($this, "truncateValues"), $cityValues);
-    //sort the values truncated from high to low
-    arsort($truncateValues);
 
     //this will keep tracking the keys in the array
-    $arrayKeys = array_keys($truncateValues);
+    $arrayKeys = array_keys($sortedScores);
+
     //Keep the last score to compare with the actual score
-    $lastScore = $truncateValues[$arrayKeys[0]];
+    $lastScore = $sortedScores[$arrayKeys[0]];
     //Keep tracking the positions. Once $lastScore variable and the first value
     // in the $truncatedVales array are same, the the $i variable is set to 1
     $position = 1;
-    foreach($truncateValues as $key => $value){
+    foreach($sortedScores as $key => $value){
         //If last score is different then increases one position.
         //Because lastScore and the first value are same it will not be evaluated as true
         if($value != $lastScore){
@@ -319,6 +325,51 @@ class RankController extends Controller{
         //Update last score to actual value
         $lastScore = $value;
     }
+
+    return $rankingScores;
+  }
+  /**
+  * Sort the truncated z-scores from high to low value
+  * @param array $cityValues receive a array with the z-values
+  */
+  private function sortZvalues($cityValues){
+    //This will hold the ranking values e.g. 1,2,3 ...
+    $rankingScores = array();
+
+    //truncate the values in the array
+    $truncateValues = array_map(array($this, "truncateValues"), $cityValues);
+    //sort the truncated z-scores from high to low
+    arsort($truncateValues);
+
+    //Make the ranking from the truncated z-values
+    $rankingScores = RankController::makeDenseRanking($truncateValues);
+
+    return $rankingScores;
+  }
+
+  /**
+  * This method will calculate a overall rating from the ranking create for each key field
+  * it will sum the ranking values of each key value and then sort them from low to high,
+  * once the city that has the lowest score will have the best position
+  * @param array $keyFieldsRank It will receive multidimentional array which keeps
+  *                             the ranking of each key field
+  */
+  private function overallRating($keyFieldsRank){
+    //Create an array with citie's name as key and each key set as zero
+    $overallSort = array_fill_keys(array_keys($keyFieldsRank["education"]), 0);
+    $overallRank = array();
+    //Sum the cities scores
+    foreach($keyFieldsRank as $key => $keyField){
+      foreach($keyField as $key => $value){
+        $overallSort[$key] += $value;
+      }
+    }
+    //sort the ranking scores from low to high
+    asort($overallSort);
+
+    //Make the ranking from the sum of each city's rank
+    $rankingScores = RankController::makeDenseRanking($overallSort);
+
     return $rankingScores;
   }
 }

@@ -1,0 +1,1 @@
+mongoimport --db smartcities --collection cities --file "C:\Users\mateus\Google Drive\TGSI\data\CompiledData.json"

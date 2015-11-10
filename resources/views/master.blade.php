@@ -52,12 +52,13 @@
     <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
     <!-- Latest compiled and minified JavaScript -->
     <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+        //Variable will hold the base app url.
+        //This varible has to be declared here otherwise the blade syntax will not be recognized.
+        var APP_URL = {!! json_encode(url('/')) !!};
+    </script>
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script> -->
     <script src="{{ URL::asset('assets/js/function.js') }}"></script>
-    <script type="text/javascript">
-        //google.load('visualization', '1.1', {'packages':['corechart', 'line']});
-        //google.load("visualization", "1.1", {packages:["table"]});
-    </script>
     @yield("jsScripts")
   </footer>
 </html>
