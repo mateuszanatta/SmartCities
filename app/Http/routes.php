@@ -22,6 +22,7 @@ Route::get('cidades', 'SocialController@cidades');
 Route::get('facebook', 'FbController@index');
 Route::get('rank', 'RankController@index');
 Route::get('showRank', 'RankController@showRank');
+Route::get('socialWorker', 'SocialWorkerController@index');
 
 //These routes will be used to request the charts for the profile page
 Route::get('profiles/{cityName}', 'CityProfileController@index');
@@ -37,7 +38,7 @@ Route::get('profiles/environment/{cityName}', 'CityProfileController@environment
 //Criar link para efetuar login
 Route::get('facebook/login', ['as' => 'facebook.login', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb){
   //Envia um array com permissoes a serem solicitadas
-  $login_url = $fb->getLoginUrl(['email']);
+  $login_url = $fb->getLoginUrl(['email', 'user_posts', 'user_location', 'user_birthday']);
   return $login_url;
 }]);
 
@@ -49,6 +50,7 @@ Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\La
   }catch (Facebook\Exceptions\FacebookSDKException $e)
   {
     dd($e->getMessage);
+    return redirect()->action('FbController@index');
   }
 
   if(!$token){
@@ -59,12 +61,13 @@ Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\La
       abort(403, 'Unauthorized action.');
     }
     //user denied Request
-    dd(
-      $helper->getError(),
-      $helper->getErrorCode(),
-      $helper->getErrorReason(),
-      $helper->getErrorDescrption()
-    );
+    return redirect()->action('FbController@index');
+    //dd(
+      //$helper->getError(),
+      //$helper->getErrorCode(),
+      //$helper->getErrorReason()//,
+      //$helper->getErrorDescrption()
+    //);
   }
 
   //Try to get long lived token_name
@@ -87,7 +90,7 @@ Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\La
 
   //Get basic info on the user from facebook
   try{
-    $response = $fb->get('/me?fields=id,name');
+    $response = $fb->get('/me?fields=id,name,birthday,location, email');
   }catch(Facebook\Exceptions\FacebookSDKException $e){
     dd($e->getMessage());
   }
@@ -96,11 +99,7 @@ Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\La
   $facebook_user = array_dot($response->getGraphUser());
   Session::put('fb_user_info', $facebook_user);
   Session::put('isFBLogged', true);
-  Session::put('username', $facebook_user['name']);
-  Session::put('picture', $facebook_user['picture']['url']);
-  // echo '<pre>';
-  // print_r($facebook_user);
-  // echo '</pre>';
+
   return redirect()->action('FbController@index');
 
 }]);

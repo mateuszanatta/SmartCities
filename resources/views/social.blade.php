@@ -21,6 +21,7 @@
                 <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
                 </fb:login-button>
               </span> -->
+              {{Session::put("isFBLogged", false)}}
               @if(Session::get("isFBLogged"))
         				<img src="{!!Session::get("picture")!!}" />
         				<span class = "label label-success">Welcome {{Session::get("username")}} your log in was successful</span>
