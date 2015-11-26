@@ -13,8 +13,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \SmartCity\Console\Commands\Inspire::class,
+        //\SmartCity\Console\Commands\Inspire::class,
+        // \SmartCity\Console\Commands\FacebookUserTags::class,//regiter the command on artisan
+
     ];
+
 
     /**
      * Define the application's command schedule.
@@ -24,7 +27,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+        // $schedule->command('inspire')
+        //          ->hourly();
+
+        //It will excute the class SocialWorkerController at midnight and retrieve the user tags from facebook
+       $schedule->call("SmartCity\Http\Controllers\SocialWorkerController@index")
+                ->daily()
+                ->name("facebooktags")
+                ->withoutOverlapping();
+
     }
 }

@@ -1,14 +1,15 @@
 <?php
 namespace SmartCity\Http\Controllers;
 use SmartCity\Facebook;
-use DB;
+use SmartCity\FacebookTags;
+use DateTime;
 
 class SocialWorkerController extends Controller{
   private $facebookModel;
-  private $tagModel;
+
   public function index(\SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb){
     $this->facebookModel = new Facebook;
-    $this->tagModel = new FacebookTags;
+    // $tagModel = new FacebookTags;
 
     $userExist = SocialWorkerController::userExist();
 
@@ -18,7 +19,12 @@ class SocialWorkerController extends Controller{
 
       foreach($userAccessToken as $key => $value){
           $fb->setDefaultAccessToken($value["AccessToken"]);
-          $requestUserPosts = $fb->request("GET", "/me?fields=posts.limit(100).since(2015-11-12){created_time,message}");
+          //Get yesterday's date
+          $date = new DateTime("yesterday");
+          //retrive yesterday's date in the format 9999-99-99
+          $yesterdayDate = $date->Format("Y-m-d");
+          $yesterdayDate = "2015-11-25";
+          $requestUserPosts = $fb->request("GET", "/me?fields=posts.limit(100).since(" . $yesterdayDate . "){message}");
 
           $batch = ["user-posts" => $requestUserPosts];
 
@@ -36,14 +42,15 @@ class SocialWorkerController extends Controller{
 
           $posts = $responses->getBody();
           $posts = json_decode($posts);
+
           $posts = $posts[0]->body;
           $posts = json_decode($posts);
 
           $data = $posts->posts->data;
 
-          $this->dispatch(new \SmartCity\Commands\FacebookPosts($data, $value["Current_city"]));
+          // $this->dispatch(new \SmartCity\Jobs\FacebookPost($data, $value["Current_city"]));
+          $this->dispatch(new \SmartCity\Jobs\FacebookPost($data));
       }
-      DB::reconnect();//Make a fresh connection
     }
   }
 
@@ -55,50 +62,5 @@ class SocialWorkerController extends Controller{
   private function userExist(){
     $result = $this->facebookModel->project(array("User_id" => true, "Current_city" => true, "_id" => false))->get()->count();
     return $result;
-  }
-
-  private function incrementTags($tagName, $count){
-    $collectionExist = SocialWorkerController::collectionExist();
-
-    if($collectionExist){
-      $cityExist = SocialWorkerController::cityExist();
-      $tagExist = SocialWorkerController::tagsExist($tagName);
-
-      if($cityExist > 0){
-        if($tagExist > 0){
-          SocialWorkerController::updateTag($tagName, $count);
-        }
-      }else{
-        SocialWorkerController::saveTag($tagName, $count);
-      }
-    }else{
-      print_r('Saving tag');
-      SocialWorkerController::saveTag($tagName, $count);
-    }
-  }
-
-  private function saveTag($tagName, $count){
-    $this->tagModel->TagName            = $tagName;
-    $this->tagModel->City               = $this->city;
-    $this->tagModel->NumberOfOccurences = $count;
-
-    $this->tagModel->save();
-  }
-
-  private function updateTag($tagName, $count){
-    $test = $this->tagModel->find($this->city)->where("TagName", $tagName);
-    print_r($test);
-  }
-
-  private function cityExist(){
-    return $this->tagModel->find($this->city);
-  }
-
-  private function collectionExist(){
-    return $this->tagModel;
-  }
-
-  private function tagsExist($tagName){
-    return $this->tagModel->where("TagName", $tagName)->count();
   }
 }

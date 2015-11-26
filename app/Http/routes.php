@@ -22,7 +22,7 @@ Route::get('cidades', 'SocialController@cidades');
 Route::get('facebook', 'FbController@index');
 Route::get('rank', 'RankController@index');
 Route::get('showRank', 'RankController@showRank');
-Route::get('socialWorker', 'SocialWorkerController@index');
+//Route::get('socialWorker', 'SocialWorkerController@index');
 
 //These routes will be used to request the charts for the profile page
 Route::get('profiles/{cityName}', 'CityProfileController@index');
