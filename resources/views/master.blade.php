@@ -3,12 +3,6 @@
   <head>
     <title>@yield("title")</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Latest compiled and minified CSS -->
-    <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
-    <!-- {!! HTML::style('/assets/css/bootstrap.min.css') !!} -->
-    <!-- <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}"> -->
-    <!-- <link rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css"> -->
     <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/css/dashboard.css') }}">
     @yield("cssSection")
@@ -30,7 +24,6 @@
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
                 <li>{!! HTML::linkAction('RankController@index', 'Ranking') !!}</li>
-                <li><a href="#">Benchmarking</a></li>
                 <li>{!! HTML::linkAction('SocialController@index', 'Social') !!}</li>
                 <li><a href="#">About</a></li>
               </ul>
@@ -46,10 +39,8 @@
   <footer>
     <!-- jQuery library -->
     <script src="{{ URL::asset('assets/js/jquery.min.js') }}"></script>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
     <!-- Load Google Charts API -->
     <script type="text/javascript" src="{{ URL::asset('assets/js/googleJsapi') }}"></script>
-    <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
     <!-- Latest compiled and minified JavaScript -->
     <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript">

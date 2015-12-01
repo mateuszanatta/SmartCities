@@ -32,9 +32,9 @@ class Kernel extends ConsoleKernel
 
         //It will excute the class SocialWorkerController at midnight and retrieve the user tags from facebook
        $schedule->call("SmartCity\Http\Controllers\SocialWorkerController@index")
-                ->daily()
-                ->name("facebooktags")
-                ->withoutOverlapping();
+                ->everyMinute();//daily()
+                // ->name("facebooktags")
+                // ->withoutOverlapping();
 
     }
 }

@@ -17,12 +17,19 @@ Route::get('/', function () {
 
 Route::get('cities', 'CitiesController@index');
 Route::get('citiesCategories', 'CitiesController@category');
-Route::get('social', 'SocialController@index');
-Route::get('cidades', 'SocialController@cidades');
-Route::get('facebook', 'FbController@index');
 Route::get('rank', 'RankController@index');
 Route::get('showRank', 'RankController@showRank');
-//Route::get('socialWorker', 'SocialWorkerController@index');
+Route::get('socialWorker', 'SocialWorkerController@index');
+
+//These routes are used to social section of the web site
+Route::get('social/overview', 'SocialController@index');
+Route::get('social/cidades', 'SocialController@cidades');
+Route::get('social/allTagsTopTen', 'SocialController@allTagsTopTen');
+Route::get('social/sumAllTags', 'SocialController@sumAllTags');
+Route::get('social/allTags', 'SocialController@selectAllTags');
+Route::get('social/userAgeRange', 'SocialController@userAgeRange');
+Route::get('social/peopleFrom', 'SocialController@peopleFrom');
+Route::get('facebook', 'FbController@index');
 
 //These routes will be used to request the charts for the profile page
 Route::get('profiles/{cityName}', 'CityProfileController@index');
@@ -36,7 +43,7 @@ Route::get('profiles/environment/{cityName}', 'CityProfileController@environment
 //END profile routes
 
 //Criar link para efetuar login
-Route::get('facebook/login', ['as' => 'facebook.login', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb){
+Route::get('social/facebook/login', ['as' => 'facebook.login', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb){
   //Envia um array com permissoes a serem solicitadas
   $login_url = $fb->getLoginUrl(['email', 'user_posts', 'user_location', 'user_birthday']);
   return $login_url;
@@ -49,7 +56,7 @@ Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\La
     $token = $fb->getAccessTokenFromRedirect();
   }catch (Facebook\Exceptions\FacebookSDKException $e)
   {
-    dd($e->getMessage);
+    dd($e->message);
     return redirect()->action('FbController@index');
   }
 

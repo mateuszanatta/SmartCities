@@ -303,7 +303,7 @@ class RankController extends Controller{
   * Create the dense ranking from sorted scores
   *@param array $sortedScores It should receive an array with already sorted values
   */
-  private function makeDenseRanking($sortedScores){
+  public function makeDenseRanking($sortedScores){
     //This will hold the ranking values e.g. 1,2,3 ...
     $rankingScores = array();
 

@@ -87,11 +87,15 @@ return [
 
         'mongodb' => [
             'driver'   => 'mongodb',
-            'host'     => 'localhost',
-            'port'     => 27017,
-            'database' => 'smartcities',
+            'host'     => env('MONGO_HOST', 'localhost'),
+            'port'     => env('MONGO_PORT', 27017),
+            'database' => env('MONGO_DATABASE', 'smartcities'),
+            // 'database' => env('MONGO_DATABASE', 'mateuszanatta'),
+            // 'username' => env('MONGO_USER', ''),
+            // 'password' => env('MONGO_PASSWORD', ''),
             'options' => array(
                 'db' => 'admin'
+                // 'db' => env('MONGO_DATABASE', 'mateuszanatta')
               )
           ],
 

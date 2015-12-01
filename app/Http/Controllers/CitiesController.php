@@ -20,9 +20,6 @@ class CitiesController extends Controller{
     return $data;
   }
   public function category(){
-    // $data = Cities::where("Municipio", "Alpestre")->take(1)->get();
-    // $data = Cities::all();
-
     //It is going to receive a GET request with a array that defines what variableas are being requested
     //Ex.: localhost:8080/public/cities?vars[]=Domicilios_Particulares_Permanentes&vars[]=Por_Abastecimento_de_Agua&vars[]=Rede_Geral
     if(isset($_GET)){
@@ -40,20 +37,10 @@ class CitiesController extends Controller{
                       $var => true,
                       'Municipio' => true,
                       "_id" => false));
-      // $keys = Cities::raw()->findOne(array('Domicilios_Particulares_Permanentes' =>array(
-      //                 $var => true,
-      //                 'Municipio' => true,
-      //                 "_id" => false)));
-
       $data2 = array();
       foreach($data as $key => $value){
         array_push($data2, array($value['Municipio'] => $value[$columns[0]]));
       }
-      //$data2 = json_encode($data);
-      //echo '<pre>';
-      // print_r($data[0]['Domicilios_Particulares_Permanentes']);
-      //print_r($data2[0]);
-      //echo '</pre>';
       return $data2;
     }else{
       return "Nenhuma variável foi selecionada";

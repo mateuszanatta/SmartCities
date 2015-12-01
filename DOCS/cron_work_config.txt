@@ -1,0 +1,1 @@
+00 00 * * * php /usr/share/nginx/html/si/apps/mateuszanatta/artisan schedule:run

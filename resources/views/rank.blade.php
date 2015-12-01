@@ -19,60 +19,9 @@
 @section("jsScripts")
 <script type="text/javascript">
   google.load("visualization", "1.1", {packages:["table"]});
-  google.setOnLoadCallback(drawRankTable);
-
-  function drawRankTable(){
-    //Make ajax call to a showRank method
-    $.ajax({
-      url:'showRank',
-      dataType: 'json',
-      success: function(info){//In case of success it will receive a array from the server
-        //create a string with the coloumns name
-        var cols = '{"cols" :[{"label":"Cidade", "type":"string"},{"label":"Educação", "type":"number"},'+
-                   '{"label":"Economia", "type":"number"},{"label":"Emprego", "type":"number"},'+
-                   '{"label":"Meio Ambiente", "type":"number"},{"label":"Finanças Públicas", "type":"number"},'+
-                   '{"label":"Saúde", "type":"number"},{"label":"Rank", "type":"number"}],';
-        //create a string to keep the rows
-        var rows = '"rows":[';
-        //Get the cities names
-        var cities = Object.keys(info.education);
-        //Iterate the cities array and concatenate the string with the values of each city
-        //in the array cities
-        $.each(cities, function(key, elem){
-           rows +='{"c":[{"v":"'+elem+'"},{"v":'+info['education'][elem]+'},'+
-          '{"v":'+info['economy'][elem]+'},{"v":'+info['employment'][elem]+'},'+
-          '{"v":'+info['environment'][elem]+'},{"v":'+info['governmentExpen'][elem]+'},'+
-          '{"v":'+info['health'][elem]+'},{"v":'+info['overall'][elem]+'}]},';
-        });
-        rows = rows.substr(0, (rows.length - 1));
-        rows += ']}';
-
-        var table = cols+rows;
-        var data = new google.visualization.DataTable(table);
-
-        var options = {width: '100%',
-                       sortColumn: 7}
-
-        var visualization = new google.visualization.Table(document.getElementById('rankTable'));
-
-        google.visualization.events.addListener(visualization, 'ready', function(){
-          $('#rankTable tr').css('cursor', 'pointer');
-        });
-
-        visualization.draw(data, options);
-
-        //Add a listner to identify when a row is selected
-        google.visualization.events.addListener(visualization, 'select', selectHandler);
-
-        //Handle the select event and redirect the page to the profile page of the selected city
-        function selectHandler(e){
-          var city = data.getValue(visualization.getSelection()[0].row, 0);
-          window.location = APP_URL + '/profiles/' + city
-        }
-      },
-      method: 'GET'
-    });
-  }
+  google.setOnLoadCallback(function(){
+    drawRankTable();
+  });
 
 </script>
 @endsection

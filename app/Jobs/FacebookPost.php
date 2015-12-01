@@ -164,6 +164,11 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
           FacebookPost::setCityTags("Buracos");
 
         }
+        if((strcasecmp($value, "#lixo") === 0)){
+
+          FacebookPost::setCityTags("Lixo");
+
+        }
       }
     }
 

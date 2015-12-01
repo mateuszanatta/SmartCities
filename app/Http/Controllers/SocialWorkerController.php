@@ -23,7 +23,7 @@ class SocialWorkerController extends Controller{
           $date = new DateTime("yesterday");
           //retrive yesterday's date in the format 9999-99-99
           $yesterdayDate = $date->Format("Y-m-d");
-
+          $yesterdayDate = "2015-11-28";
           $requestUserPosts = $fb->request("GET", "/me?fields=posts.limit(100).since(" . $yesterdayDate . "){message}");
 
           $batch = ["user-posts" => $requestUserPosts];
