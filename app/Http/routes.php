@@ -56,7 +56,7 @@ Route::get('facebook/callback', ['as' => 'facebook.callback', function(SammyK\La
     $token = $fb->getAccessTokenFromRedirect();
   }catch (Facebook\Exceptions\FacebookSDKException $e)
   {
-    dd($e->message);
+    dd($e->getMessage());
     return redirect()->action('FbController@index');
   }
 

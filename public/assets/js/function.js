@@ -373,7 +373,7 @@ $('#city').change(function(){
 function initFacebook(){
   $(document).ready(function(){
     $.ajax({url:'facebook/login', success: function(result){
-      $('.fb-login-link').attr({href: result});
+      $('#fb-login-link').attr({href: result});
       //console.log('Link: ' + result);
     }
     });
