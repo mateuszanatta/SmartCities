@@ -9,20 +9,24 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use DB;
-
+/**
+* This class implemente threads and perform a job running throughout an array
+* to find and count the hashtags
+*/
 class FacebookPost extends Job implements SelfHandling, ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
+
     private $data;
     private $city;
     private $tags;
 
     /**
      * Create a new job instance.
-     *
+     * @param Array $data the content of the post
      * @return void
      */
-    public function __construct($data)//, $city)
+    public function __construct($data)
     {
         $this->data = $data;
         $this->tags = array();
@@ -36,19 +40,27 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
      */
     public function handle()
     {
-      //Iterate the array and sends the post data to be analyzed
-      foreach($this->data as $key => $value){
-        FacebookPost::findTags($value);
-        FacebookPost::save();
+      foreach ($this->data as $status) {
+        //Iterate the array and sends the post data to be analyzed
+        if($status !== null){
+          foreach($status as $key => $value){
+            //Verify if the array has the message, which contains the user writing
+            if($key == "message"){
+              FacebookPost::findTags($value);
+              FacebookPost::save();
+            }
+          }
+        }
       }
 
       DB::reconnect();//Make a fresh connection
     }
-
-    private function findTags($data){
-        foreach($data as $objKey => $message){
-
-          if($objKey == "message"){
+    /**
+    * This method will look for tags that stand for issues
+    * @param String $message The content of the post
+    * @return Bool Return False if there is no city mentioned in the message
+    */
+    private function findTags($message){
             $findCity = FacebookPost::findCityTag($message);
             if(isset($findCity)){
               $this->city = $findCity;
@@ -56,8 +68,6 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
             }else{
               return FALSE;
             }
-          }
-        }
     }
     /**
     * This method will look for tags that stand for issues
@@ -333,9 +343,6 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
     /**
     * This function will save the hashtag information in the database, adding a
     * new hashtag, its city and number of times it appeared
-    * @param String $tagName the identification of the tag to update the counter
-    * @param Int $count the number of times a hashtag was found
-    * @param FacebookTags $tagModel It keeps the model information
     */
     private function save(){
       //instantiate the model object
@@ -377,7 +384,7 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
     * It will save information in the database, adding a new hashtag, its city
     * and number of times it appeared.
     * @param String $tagName the identification of the tag to update the counter
-    * @param FacebookTags $tagModel It keeps the model information
+    * @param String $city the city related to the tags
     */
     private function saveInfo($tagName, $city){
       $tagModel = new FacebookTags;
@@ -425,6 +432,7 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
     * This function will increment the hashtag counter in the database
     * @param String $tagName the identification of the tag to update the counter
     * @param Int $count the number of times a hashtag was found
+    * @param String $city the city related to the tags
     */
     private function incrementTag($tagName, $count, $city){
       $tagModel = new FacebookTags;
@@ -437,6 +445,7 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
     /**
     * This function will verify if the city is already stored in the database
     * @param FacebookTags $tagModel It keeps the model information
+    * @param String $city the city related to the tags
     * @return Int Return the number of time the city is found in the database
     */
     private function cityExist($tagModel, $city){
@@ -445,7 +454,7 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
 
     /**
     * This function will verify if model exist
-    * @param FacebookTags $tagModel It keeps the model information
+    * @param FacebookTags $model It keeps the model information
     */
     private function collectionExist($model){
       return $model;
@@ -454,6 +463,7 @@ class FacebookPost extends Job implements SelfHandling, ShouldQueue
     /**
     * This function will verify if a tag is already in the database
     * @param String $tagName the identification of the tag
+    * @param String $city the city related to the tags
     * @return bool Return true if the tag exist, otherwise return false
     */
     private function tagsExist($tagName, $city){

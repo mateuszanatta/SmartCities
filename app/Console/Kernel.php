@@ -36,5 +36,9 @@ class Kernel extends ConsoleKernel
                 // ->name("facebooktags")
                 // ->withoutOverlapping();
 
+      //It will excute the class FacebookPagesController every saturday and cities' Facebook pages posts
+      $schedule->call("SmartCity\Http\Controllers\FacebookPagesController@index")
+               ->saturdays();
+
     }
 }

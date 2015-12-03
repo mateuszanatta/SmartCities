@@ -1,5 +1,9 @@
 <?php
-
+/**Add this line to fix the issue with:
+*"Cross-site request forgery validation failed. The "state" param from the URL and session do not match."
+* It is the only solution that worked for me, once it appears to be a bug on FacebookSDK when tracking SESSION
+*/
+session_start();
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -30,6 +34,7 @@ Route::get('social/allTags', 'SocialController@selectAllTags');
 Route::get('social/userAgeRange', 'SocialController@userAgeRange');
 Route::get('social/peopleFrom', 'SocialController@peopleFrom');
 Route::get('facebook', 'FbController@index');
+Route::get('facebookPages', 'FacebookPagesController@index');
 
 //These routes will be used to request the charts for the profile page
 Route::get('profiles/{cityName}', 'CityProfileController@index');

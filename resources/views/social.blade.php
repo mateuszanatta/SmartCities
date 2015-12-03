@@ -35,9 +35,3 @@
   </div>
 </div>
   @endsection
-  @section("jsScripts")
-  <!-- Facebook JavaScript Login -->
-  <script type="text/javascript">
-
-  </script>
-@endsection
