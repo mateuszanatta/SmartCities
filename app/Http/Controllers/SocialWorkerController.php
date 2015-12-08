@@ -39,12 +39,12 @@ class SocialWorkerController extends Controller{
             //$responses = $fb->sendBatchRequest($batch);
           }catch(\Facebook\Exceptions\FacebookResponseException $e){
             // When Graph returns an error
-           dd('Graph returned an error: ' . $e->getMessage());
-            exit;
+           //dd('Graph returned an error: ' . $e->getMessage());
+            continue;
           } catch(Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
-            dd('Facebook SDK returned an error: ' . $e->getMessage());
-            exit;
+            //dd('Facebook SDK returned an error: ' . $e->getMessage());
+            continue;
           }
 
           //Try to get posts from first to last page

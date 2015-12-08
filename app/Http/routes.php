@@ -23,7 +23,6 @@ Route::get('cities', 'CitiesController@index');
 Route::get('citiesCategories', 'CitiesController@category');
 Route::get('rank', 'RankController@index');
 Route::get('showRank', 'RankController@showRank');
-Route::get('socialWorker', 'SocialWorkerController@index');
 
 //These routes are used to social section of the web site
 Route::get('social/overview', 'SocialController@index');
@@ -34,6 +33,7 @@ Route::get('social/allTags', 'SocialController@selectAllTags');
 Route::get('social/userAgeRange', 'SocialController@userAgeRange');
 Route::get('social/peopleFrom', 'SocialController@peopleFrom');
 Route::get('facebook', 'FbController@index');
+//Route::get('socialWorker', 'SocialWorkerController@index');
 Route::get('facebookPages', 'FacebookPagesController@index');
 
 //These routes will be used to request the charts for the profile page

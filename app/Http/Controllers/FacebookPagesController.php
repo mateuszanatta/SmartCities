@@ -14,16 +14,17 @@ class FacebookPagesController extends Controller
       try{
         //Get last saturday date
         $since = new DateTime("Saturday last week");
+        var_dump($since);
         // Requires the "read_stream" permission
-        $requestPagePosts = $fb->get($values["FacebookId"] . "/posts?fields=message&limit=100&created_time&since=" . $since->Format("Y-m-d"));//2015-11-30");
+        $requestPagePosts = $fb->get($values["FacebookId"] . "/posts?fields=message,created_time&limit=100&since=" . $since->Format("Y-m-d"));//2015-11-30");
       }catch(\Facebook\Exceptions\FacebookResponseException $e){
         // When Graph returns an error
        dd('Graph returned an error: ' . $e->getMessage());
-        exit;
+        continue;
       } catch(\Facebook\Exceptions\FacebookSDKException $e) {
         // When validation fails or other local issues
         dd('Facebook SDK returned an error: ' . $e->getMessage());
-        exit;
+        continue;
       }
 
       //Try to get posts from first to last page
